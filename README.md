@@ -34,3 +34,50 @@ python3 todo.py --db my_tasks.json add "Custom list task"
 pip install pytest
 python3 -m pytest test_todo.py
 ```
+
+## Facebook Page Watcher
+
+A script that watches a public Facebook page (no login required, since the
+content is public) and emails you when a new post appears. Standard library
+only, no external dependencies.
+
+Facebook has no official no-login API for arbitrary public pages, so this
+works by periodically fetching the mobile page and diffing posts against a
+local state file. It clearly reports when Facebook blocks the request with a
+login wall rather than failing silently. You may need to tweak the parsing
+regex in `extract_posts()` if Facebook changes its page markup.
+
+### Setup
+
+1. Enable 2-Step Verification on the Gmail account you want to send from,
+   then create an App Password: https://myaccount.google.com/apppasswords
+2. Export credentials:
+   ```bash
+   export GMAIL_USER="you@gmail.com"
+   export GMAIL_APP_PASSWORD="xxxx xxxx xxxx xxxx"
+   ```
+
+### Usage
+
+```bash
+# First run just records the current posts (no email sent yet)
+python3 facebook_page_watcher.py --to you@example.com
+
+# Preview what would be emailed without actually sending
+python3 facebook_page_watcher.py --to you@example.com --dry-run
+
+# Watch a different page
+python3 facebook_page_watcher.py --page-url "https://m.facebook.com/SomePage/" --to you@example.com
+```
+
+### Scheduling
+
+Run it on a recurring basis with cron (every 30 minutes, for example):
+
+```cron
+*/30 * * * * cd /path/to/hello-world && /usr/bin/python3 facebook_page_watcher.py --to you@example.com >> watcher.log 2>&1
+```
+
+Note: this script must run somewhere with real network access to Facebook
+and persistent storage for `facebook_watcher_state.json` (e.g. your own
+computer or a small server) — it doesn't run on its own.
