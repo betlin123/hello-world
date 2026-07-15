@@ -81,3 +81,14 @@ Run it on a recurring basis with cron (every 30 minutes, for example):
 Note: this script must run somewhere with real network access to Facebook
 and persistent storage for `facebook_watcher_state.json` (e.g. your own
 computer or a small server) — it doesn't run on its own.
+
+## Learning Coach — Azure (Claude Code skill)
+
+A Claude Code skill at `.claude/skills/learning-coach-azure/SKILL.md` that
+turns Claude into a personal Azure tutor: it grounds explanations in official
+Microsoft Learn docs, teaches one concept at a time with quizzes and hands-on
+checks, and keeps a running progress log in `azure-learning-progress.md` so
+sessions pick up where you left off.
+
+Just ask Claude to help you learn Azure (or study for an Azure certification
+like AZ-900) and the skill activates automatically.
